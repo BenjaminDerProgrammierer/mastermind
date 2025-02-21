@@ -1,13 +1,25 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Mastermind</title>
-  </head>
-  <body>
-    <div id="game"></div>
 
-    <script src="src/index.ts" type="module"></script>
-  </body>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mastermind</title>
+  <link rel="stylesheet" href="src/style.css">
+  <script src="src/index.ts" type="module" defer></script>
+</head>
+
+<body>
+  <h1 class="project-title">Mastermind</h1>
+  <p class="project-info">This is a simple implementation of the Mastermind game. Mastermind is a guessing game designed
+    to test your deduction skills. Play by clicking the colored dots.</p>
+  <div class="controls">
+    <button class="control-button" onclick="window.history.back();">Go back</button>
+    <button class="control-button" onclick="window.location.reload();">Restart</button>
+  </div>
+  <div id="app">
+    <div id="game"></div>
+  </div>
+</body>
+
 </html>

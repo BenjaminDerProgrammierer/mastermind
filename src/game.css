@@ -1,0 +1,118 @@
+:root {
+  --color-peg: 25px;
+  --button: 20px;
+  --result-peg: 8px;
+  --peg-gap: 5px;
+  --result-gap: 2px;
+}
+
+#app {
+  padding: 20px;
+
+  #game {
+    display: flex;
+    flex-direction: column;
+    width: calc(var(--color-peg) * 4 + var(--result-peg) * 2 + var(--peg-gap) * 5);
+    background-color: brown;
+    padding: var(--peg-gap);
+  }
+
+  .pegs {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    padding-top: var(--peg-gap);
+    padding-bottom: var(--peg-gap);
+    gap: 1px;
+  }
+
+  .pegs:not(:last-child) {
+    border-bottom: 2px solid white;
+  }
+
+  .peg {
+    background-color: rgba(255, 255, 255, 0.7);
+    transform: scale(0.5);
+    width: var(--color-peg);
+    height: var(--color-peg);
+    border-radius: 50%;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+  }
+
+  .results {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--result-gap);
+    align-items: center;
+    margin-left: var(--peg-gap);
+  }
+
+  .result {
+    width: var(--result-peg);
+    height: var(--result-peg);
+    border-radius: 50%;
+  }
+
+  .color-picker {
+    position: absolute;
+    width: calc(var(--color-peg) * 8 + var(--peg-gap) * 9);
+    align-items: center;
+    background-color: brown;
+    margin-left: 10px;
+    padding-left: 5px;
+    padding-right: 5px;
+    border-radius: 5px;
+    transition: top 0.5s ease;
+  }
+
+  .button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: var(--button);
+    height: var(--button);
+    border-radius: 10%;
+    background-color: white;
+    border: 1px solid black;
+    cursor: pointer;
+
+    & span {
+      margin-top: -4px;
+    }
+  }
+
+  .red {
+    background-color: red;
+    transform: scale(1);
+  }
+
+  .blue {
+    background-color: blue;
+    transform: scale(1);
+  }
+
+  .green {
+    background-color: green;
+    transform: scale(1);
+  }
+
+  .yellow {
+    background-color: yellow;
+    transform: scale(1);
+  }
+
+  .white {
+    background-color: white;
+    transform: scale(1);
+  }
+
+  .black {
+    background-color: black;
+    transform: scale(1);
+  }
+
+  .peg.selected {
+    border: 5px solid lime;
+    transform: scale(1);
+  }
+}

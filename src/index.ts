@@ -1,17 +1,13 @@
-import "./styles.css";
+import "./game.css";
+import { setPeg, unsetPeg, setSelected, colors } from "./helpers";
 
 const game = document.getElementById("game") as HTMLDivElement;
 const rows: HTMLDivElement[] = [];
 const pegs: HTMLDivElement[][] = [];
 const results: HTMLDivElement[][] = [];
-const colors = ["red", "blue", "green", "yellow", "white", "black"];
 
 let currentRow = 11;
-
-setInterval(() => {
-  currentRow = (currentRow - 1) % 12;
-  colorPicker.style.top = rows[currentRow].offsetTop + "px";
-}, 5000);
+let currentPeg = 0;
 
 for (let i = 0; i < 12; i++) {
   const row = document.createElement("div");
@@ -25,7 +21,6 @@ for (let i = 0; i < 12; i++) {
     const cell = document.createElement("div");
     rowPegs.push(cell);
     cell.classList.add("peg");
-    cell.classList.add("white");
     row.appendChild(cell);
   }
 
@@ -54,19 +49,44 @@ for (const color of colors) {
   const colorCell = document.createElement("div");
   colorCell.classList.add("peg");
   colorCell.classList.add(color);
+  colorCell.addEventListener("click", () => {
+    setPeg(pegs[currentRow][currentPeg], color);
+    if (currentPeg !== 4) {
+      currentPeg++;
+      setSelected(pegs[currentRow][currentPeg]); // select the next peg
+    }
+  });
   colorPicker.appendChild(colorCell);
 }
 
 const back = document.createElement("div");
 back.classList.add("button");
 back.innerHTML = "<span>🔙</span>";
+back.addEventListener("click", () => {
+  if (currentPeg !== 0) {
+    currentPeg--;
+    unsetPeg(pegs[currentRow][currentPeg]);
+    setSelected(pegs[currentRow][currentPeg]); // select the previous peg
+  }
+});
 colorPicker.appendChild(back);
 const ok = document.createElement("div");
 ok.classList.add("button");
 ok.innerHTML = "<span>✔️</span>";
+ok.addEventListener("click", () => {
+  if (currentPeg === 4) {
+    currentRow = (currentRow - 1 + 12) % 12;
+    currentPeg = 0;
+    colorPicker.style.top = rows[currentRow].offsetTop + "px";
+    setSelected(pegs[currentRow][currentPeg]); // select the next peg
+  }
+});
 colorPicker.appendChild(ok);
 
 colorPicker.style.top = rows[currentRow].offsetTop + "px";
-colorPicker.style.left = (rows[currentRow].offsetLeft + rows[currentRow].offsetWidth) + "px";
+colorPicker.style.left = (rows[currentRow].offsetLeft + rows[currentRow].offsetWidth + 20) + "px";
 
-document.body.appendChild(colorPicker);
+document.getElementById("app")!.appendChild(colorPicker);
+
+// select the first peg
+setSelected(pegs[currentRow][currentPeg]);
