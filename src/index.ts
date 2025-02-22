@@ -14,10 +14,10 @@ const dialog = {
   open: function(heading: string, message: string) {
     this.heading.textContent = heading;
     this.message.textContent = message;
-    this.dialog.showModal();
+    this.dialog.classList.add("open");
   },
   close: function() {
-    this.dialog.close();
+    this.dialog.classList.remove("open");
   }
 }
 
@@ -36,24 +36,23 @@ let currentPeg = 0;
 
 for (let i = 0; i < 12; i++) {
   const row = document.createElement("div");
-  rows.push(row);
   row.classList.add("row");
   row.classList.add("pegs");
+  rows.push(row);
 
   const rowPegs: HTMLDivElement[] = [];
-  pegs.push(rowPegs);
   for (let j = 0; j < 4; j++) {
     const cell = document.createElement("div");
     rowPegs.push(cell);
     cell.classList.add("peg");
     row.appendChild(cell);
   }
+  pegs.push(rowPegs);
 
   const resultCell = document.createElement("div");
   resultCell.classList.add("results");
 
   const rowResults: HTMLDivElement[] = [];
-  results.push(rowResults);
   for (let j = 0; j < 4; j++) {
     const result = document.createElement("div");
     rowResults.push(result);
@@ -61,9 +60,9 @@ for (let i = 0; i < 12; i++) {
     result.classList.add("white");
     resultCell.appendChild(result);
   }
-
+  results.push(rowResults);
   row.appendChild(resultCell);
-
+  
   game.appendChild(row);
 }
 
@@ -81,6 +80,8 @@ for (const color of colors) {
     }
     if (currentPeg < 4) {
       setSelected(pegs[currentRow][currentPeg]); // select the next peg
+    } else {
+      setSelected(null);
     }
   });
   colorPicker.appendChild(colorCell);
@@ -91,8 +92,8 @@ back.classList.add("button");
 back.innerHTML = "<span>🔙</span>";
 back.addEventListener("click", () => {
   if (currentPeg !== 0) {
-    unsetPeg(pegs[currentRow][currentPeg]);
     currentPeg--;
+    unsetPeg(pegs[currentRow][currentPeg]);
     setSelected(pegs[currentRow][currentPeg]); // select the previous peg
   }
 });
@@ -106,7 +107,8 @@ ok.addEventListener("click", () => {
     setResults(results[currentRow], result)
     if (result.every(color => color === "green")) {
       colorPicker.style.display = "none";
-
+      setSelected(null);
+      dialog.open("You win!", "Congratulations! You have won the game. You needed " + (11 - currentRow + 1) + " guesses to solve the puzzle.");
     } else {
       currentRow = (currentRow - 1 + 12) % 12;
       currentPeg = 0;

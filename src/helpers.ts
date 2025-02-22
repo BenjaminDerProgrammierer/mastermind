@@ -17,11 +17,13 @@ export function setPeg(peg: HTMLDivElement, color: string) {
  * Sets the peg as selected by updating its class list.
  * @param peg - The HTMLDivElement representing the peg.
  */
-export function setSelected(peg: HTMLDivElement) {
+export function setSelected(peg: HTMLDivElement | null) {
     document.querySelectorAll(".selected").forEach((peg) => {
         peg.classList.remove("selected");
     });
-    peg.classList.add("selected");
+    if (peg) {
+        peg.classList.add("selected");
+    }
 }
 
 /**
