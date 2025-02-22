@@ -1,14 +1,17 @@
 {
   "name": "mastermind",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "index.html",
   "scripts": {
-    "start": "vite dev"
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite build && vite preview",
+    "start": "npm run preview"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "description": "",
+  "description": "This is a simple implementation of the Mastermind game. Mastermind is a guessing game designed to test your deduction skills.",
   "devDependencies": {
     "typescript": "^5.7.3",
     "vite": "^6.1.1"
