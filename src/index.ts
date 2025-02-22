@@ -1,10 +1,35 @@
 import "./game.css";
-import { setPeg, unsetPeg, setSelected, colors } from "./helpers";
+import { setPeg, unsetPeg, setSelected, colors, getColor, makeResults, setResults } from "./helpers";
 
 const game = document.getElementById("game") as HTMLDivElement;
 const rows: HTMLDivElement[] = [];
 const pegs: HTMLDivElement[][] = [];
 const results: HTMLDivElement[][] = [];
+
+const dialog = {
+  dialog: document.getElementById("dialog") as HTMLDialogElement,
+  heading: document.querySelector("#dialog h1") as HTMLHeadingElement,
+  message: document.querySelector("#dialog p") as HTMLParagraphElement,
+  closeButton: document.querySelector("#dialog .close") as HTMLButtonElement,
+  open: function(heading: string, message: string) {
+    this.heading.textContent = heading;
+    this.message.textContent = message;
+    this.dialog.showModal();
+  },
+  close: function() {
+    this.dialog.close();
+  }
+}
+
+dialog.closeButton?.addEventListener("click", () => {
+  dialog.close();
+});
+
+const solution: string[] = [];
+for (let i = 0; i < 4; i++) {
+  solution.push(colors[Math.floor(Math.random() * colors.length)]);
+}
+console.log("The solution is: ", solution);
 
 let currentRow = 11;
 let currentPeg = 0;
@@ -51,8 +76,10 @@ for (const color of colors) {
   colorCell.classList.add(color);
   colorCell.addEventListener("click", () => {
     setPeg(pegs[currentRow][currentPeg], color);
-    if (currentPeg !== 4) {
+    if (currentPeg < 4) {
       currentPeg++;
+    }
+    if (currentPeg < 4) {
       setSelected(pegs[currentRow][currentPeg]); // select the next peg
     }
   });
@@ -64,8 +91,8 @@ back.classList.add("button");
 back.innerHTML = "<span>🔙</span>";
 back.addEventListener("click", () => {
   if (currentPeg !== 0) {
-    currentPeg--;
     unsetPeg(pegs[currentRow][currentPeg]);
+    currentPeg--;
     setSelected(pegs[currentRow][currentPeg]); // select the previous peg
   }
 });
@@ -75,10 +102,17 @@ ok.classList.add("button");
 ok.innerHTML = "<span>✔️</span>";
 ok.addEventListener("click", () => {
   if (currentPeg === 4) {
-    currentRow = (currentRow - 1 + 12) % 12;
-    currentPeg = 0;
-    colorPicker.style.top = rows[currentRow].offsetTop + "px";
-    setSelected(pegs[currentRow][currentPeg]); // select the next peg
+    const result = makeResults(pegs[currentRow].map(getColor), solution)
+    setResults(results[currentRow], result)
+    if (result.every(color => color === "green")) {
+      colorPicker.style.display = "none";
+
+    } else {
+      currentRow = (currentRow - 1 + 12) % 12;
+      currentPeg = 0;
+      colorPicker.style.top = rows[currentRow].offsetTop + "px";
+      setSelected(pegs[currentRow][currentPeg]); // select the next peg
+    }
   }
 });
 colorPicker.appendChild(ok);
