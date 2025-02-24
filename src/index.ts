@@ -109,11 +109,14 @@ ok.addEventListener("click", () => {
       colorPicker.style.display = "none";
       setSelected(null);
       dialog.open("You win!", "Congratulations! You have won the game. You needed " + (11 - currentRow + 1) + " guesses to solve the puzzle.");
-    } else {
+    } else if (currentRow > 0) {
       currentRow = (currentRow - 1 + 12) % 12;
       currentPeg = 0;
       colorPicker.style.top = rows[currentRow].offsetTop + "px";
       setSelected(pegs[currentRow][currentPeg]); // select the next peg
+    } else {
+      colorPicker.style.display = "none";
+      dialog.open("Game over!", "You have run out of guesses. The solution was " + solution.join(", "));
     }
   }
 });
