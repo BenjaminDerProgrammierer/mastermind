@@ -126,3 +126,26 @@ document.getElementById("app")!.appendChild(colorPicker);
 
 // select the first peg
 setSelected(pegs[currentRow][currentPeg]);
+
+// Keyboard shortcuts
+document.addEventListener("keydown", (event) => {
+  switch (event.key) {
+    case "1":
+    case "2":
+    case "3":
+    case "4":
+    case "5":
+    case "6":
+      document.querySelector(`.color-picker > *:nth-child(${event.key})`)?.dispatchEvent(new MouseEvent("click"));
+      break;
+    case "Backspace":
+      back.dispatchEvent(new MouseEvent("click"));
+      break;
+    case "Enter":
+      ok.dispatchEvent(new MouseEvent("click"));
+      break;
+    case "Escape":
+      dialog.close();
+      break;  
+  }
+});
