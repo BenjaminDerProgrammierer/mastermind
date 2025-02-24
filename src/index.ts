@@ -122,8 +122,12 @@ ok.addEventListener("click", () => {
 });
 colorPicker.appendChild(ok);
 
-colorPicker.style.top = rows[currentRow].offsetTop + "px";
-colorPicker.style.left = (rows[currentRow].offsetLeft + rows[currentRow].offsetWidth + 20) + "px";
+function adjustColorPickerPosition() {
+  colorPicker.style.top = rows[currentRow].offsetTop + "px";
+  colorPicker.style.left = (rows[currentRow].offsetLeft + rows[currentRow].offsetWidth + 20) + "px";
+}
+window.addEventListener("resize", adjustColorPickerPosition);
+adjustColorPickerPosition();
 
 document.getElementById("app")!.appendChild(colorPicker);
 

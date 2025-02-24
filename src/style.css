@@ -127,3 +127,13 @@ dialog#dialog {
         display: flex;
     }
 }
+
+@media (max-width: 768px) {
+    #app {
+        width: 100%;
+    }
+
+    #keyboard-guide {
+        width: 90%;
+    }
+}
