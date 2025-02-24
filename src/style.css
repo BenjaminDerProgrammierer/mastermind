@@ -76,6 +76,7 @@ p.project-info {
     border-radius: 5px;
     padding: 1px 5px;
     width: min-content;
+    height: min-content;
 }
 
 dialog#dialog {
