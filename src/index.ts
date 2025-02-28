@@ -1,10 +1,11 @@
+// Stage -1: Game board with color picker and dialog
 import "./game.css";
-import { setPeg, unsetPeg, setSelected, colors, getColor, makeResults, setResults } from "./helpers";
 
 const game = document.getElementById("game") as HTMLDivElement;
 const rows: HTMLDivElement[] = [];
 const pegs: HTMLDivElement[][] = [];
 const results: HTMLDivElement[][] = [];
+const colors = ["red", "blue", "green", "yellow", "white", "black"];
 
 const dialog = {
   dialog: document.getElementById("dialog") as HTMLDialogElement,
@@ -25,14 +26,7 @@ dialog.closeButton?.addEventListener("click", () => {
   dialog.close();
 });
 
-const solution: string[] = [];
-for (let i = 0; i < 4; i++) {
-  solution.push(colors[Math.floor(Math.random() * colors.length)]);
-}
-console.log("The solution is: ", solution);
-
 let currentRow = 11;
-let currentPeg = 0;
 
 for (let i = 0; i < 12; i++) {
   const row = document.createElement("div");
@@ -73,53 +67,17 @@ for (const color of colors) {
   const colorCell = document.createElement("div");
   colorCell.classList.add("peg");
   colorCell.classList.add(color);
-  colorCell.addEventListener("click", () => {
-    setPeg(pegs[currentRow][currentPeg], color);
-    if (currentPeg < 4) {
-      currentPeg++;
-    }
-    if (currentPeg < 4) {
-      setSelected(pegs[currentRow][currentPeg]); // select the next peg
-    } else {
-      setSelected(null);
-    }
-  });
   colorPicker.appendChild(colorCell);
 }
 
 const back = document.createElement("div");
 back.classList.add("button");
 back.innerHTML = "<span>🔙</span>";
-back.addEventListener("click", () => {
-  if (currentPeg !== 0) {
-    currentPeg--;
-    unsetPeg(pegs[currentRow][currentPeg]);
-    setSelected(pegs[currentRow][currentPeg]); // select the previous peg
-  }
-});
 colorPicker.appendChild(back);
+
 const ok = document.createElement("div");
 ok.classList.add("button");
 ok.innerHTML = "<span>✔️</span>";
-ok.addEventListener("click", () => {
-  if (currentPeg === 4) {
-    const result = makeResults(pegs[currentRow].map(getColor), solution)
-    setResults(results[currentRow], result)
-    if (result.every(color => color === "green")) {
-      colorPicker.style.display = "none";
-      setSelected(null);
-      dialog.open("You win!", "Congratulations! You have won the game. You needed " + (11 - currentRow + 1) + " guesses to solve the puzzle.");
-    } else if (currentRow > 0) {
-      currentRow = (currentRow - 1 + 12) % 12;
-      currentPeg = 0;
-      colorPicker.style.top = rows[currentRow].offsetTop + "px";
-      setSelected(pegs[currentRow][currentPeg]); // select the next peg
-    } else {
-      colorPicker.style.display = "none";
-      dialog.open("Game over!", "You have run out of guesses. The solution was " + solution.join(", "));
-    }
-  }
-});
 colorPicker.appendChild(ok);
 
 function adjustColorPickerPosition() {
@@ -130,29 +88,3 @@ window.addEventListener("resize", adjustColorPickerPosition);
 adjustColorPickerPosition();
 
 document.getElementById("app")!.appendChild(colorPicker);
-
-// select the first peg
-setSelected(pegs[currentRow][currentPeg]);
-
-// Keyboard shortcuts
-document.addEventListener("keydown", (event) => {
-  switch (event.key) {
-    case "1":
-    case "2":
-    case "3":
-    case "4":
-    case "5":
-    case "6":
-      document.querySelector(`.color-picker > *:nth-child(${event.key})`)?.dispatchEvent(new MouseEvent("click"));
-      break;
-    case "Backspace":
-      back.dispatchEvent(new MouseEvent("click"));
-      break;
-    case "Enter":
-      ok.dispatchEvent(new MouseEvent("click"));
-      break;
-    case "Escape":
-      dialog.close();
-      break;  
-  }
-});
