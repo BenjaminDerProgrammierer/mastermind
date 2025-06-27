@@ -13,7 +13,7 @@ let currentRow = 11;
 let currentPeg = 0;
 
 function createGame() {
-  if (document.getElementsByClassName("row").length !== 0) return; 
+  if (document.getElementsByClassName("row").length !== 0) return;
   // Create the solution
   for (let i = 0; i < 4; i++) {
     solution.push(colors[Math.floor(Math.random() * colors.length)]);
@@ -53,12 +53,10 @@ function createGame() {
 
   // color picker
   const colorPicker = document.createElement("div");
-  colorPicker.classList.add("pegs");
-  colorPicker.classList.add("color-picker");
+  colorPicker.classList.add("pegs", "color-picker");
   for (const color of colors) {
     const colorCell = document.createElement("div");
-    colorCell.classList.add("peg");
-    colorCell.classList.add(color);
+    colorCell.classList.add("peg", color);
     colorCell.addEventListener("click", () => {
       setPeg(pegs[currentRow][currentPeg], color);
       if (currentPeg < 4) {
@@ -78,12 +76,14 @@ function createGame() {
 
   document.getElementById("app")!.appendChild(colorPicker);
 
+
   function adjustColorPickerPosition() {
     colorPicker.style.top = rows[currentRow].offsetTop + "px";
     colorPicker.style.left = (rows[currentRow].offsetLeft + rows[currentRow].offsetWidth + 20) + "px";
   }
   window.addEventListener("resize", adjustColorPickerPosition);
   adjustColorPickerPosition();
+
 
   // select the first peg
   setSelected(pegs[currentRow][currentPeg]);
