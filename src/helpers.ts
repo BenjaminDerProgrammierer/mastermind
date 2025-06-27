@@ -1,6 +1,5 @@
-/**
- * The colors that are available for the pegs.
- */
+import { okClick, backClick } from "./index";
+
 export const colors = ["red", "blue", "green", "yellow", "white", "black"];
 
 /**
@@ -71,7 +70,7 @@ export function makeResults(givenColors: string[], solution: string[]) {
             }
         }
     }
-    results.sort();
+    results.sort((a, b) => a.localeCompare(b));
 
     return results;
 }
@@ -88,4 +87,44 @@ export function setResults(resultElements: HTMLDivElement[], colors: string[]) {
             setPeg(element, color);
         }
     });
+}
+
+/**
+ * The dialog for displaying messages to the user.
+ * Use dialog.open(heading, message) to show the dialog.
+ * Use dialog.close() to hide the dialog.
+ */
+export const dialog = {
+  dialog: document.getElementById("dialog") as HTMLDialogElement,
+  heading: document.querySelector("#dialog h1") as HTMLHeadingElement,
+  message: document.querySelector("#dialog p") as HTMLParagraphElement,
+  closeButton: document.querySelector("#dialog .close") as HTMLButtonElement,
+  open: function(heading: string, message: string) {
+    this.heading.textContent = heading;
+    this.message.textContent = message;
+    this.dialog.classList.add("open");
+  },
+  close: function() {
+    this.dialog.classList.remove("open");
+  }
+}
+
+dialog.closeButton?.addEventListener("click", () => {
+  dialog.close();
+});
+
+export function createBackButton() {
+    const back = document.createElement("div");
+    back.classList.add("button");
+    back.innerHTML = "<span>🔙</span>";
+    back.addEventListener("click", backClick);
+    return back;
+}
+
+export function createNextButton() {
+    const ok = document.createElement("div");
+    ok.classList.add("button");
+    ok.innerHTML = "<span>✔️</span>";
+    ok.addEventListener("click", () => okClick);
+    return ok;
 }
